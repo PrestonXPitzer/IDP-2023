@@ -37,14 +37,14 @@ void character_wise_transmission(char character, int pin){
   
   //Send the first low bit, at 45.45 baud, the duty cycle per bit is going to be .022 or 22ms always. 
   //For all transmissions 2125Hz = 0, 2295Hz = 1
-  sendSquare(pin,2125,22); //send 0 to start
+  sendSquare(pin,2125,baud); //send 0 to start
   sendSquare(pin,binToFreq(bitwise[0]),baud); //The frequency of the square wave that we send varies on
   sendSquare(pin,binToFreq(bitwise[1]),baud); //the binary value of the character input. 
   sendSquare(pin,binToFreq(bitwise[2]),baud);
   sendSquare(pin,binToFreq(bitwise[3]),baud);
   sendSquare(pin,binToFreq(bitwise[4]),baud);
   sendSquare(pin,binToFreq(bitwise[5]),baud);
-  sendSquare(pin,2295,22); //The stop bit is always high 
+  sendSquare(pin,2295,baud); //The stop bit is always high 
   
   
   
