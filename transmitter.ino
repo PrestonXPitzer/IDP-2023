@@ -12,7 +12,7 @@ void sendSquare(int pin, int freq,int duty){
   //we want to send the square wave for a certain amount of time, so first find out what the timestamp is at the start of the loop
   int t_start = millis();
   while(millis()>(duty-t_start)){//Continue sending the data until the duty cycle is over
-    int period = 1/freq;
+    int period = (1/freq)*.5;
     digitalWrite(pin, HIGH);
     delay(period);
     digitalWrite(pin, LOW);
