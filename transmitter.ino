@@ -6,7 +6,8 @@ void setup() {
   Serial.begin(9600);
 
 }
-int baud = 200;
+int baud = 22; //This global variable is the number of milliseconds we should transmit a frequency for, in this case 
+// a baud rate of 45.45 converts direclty a a transmission time of 22 milliseconds. 
 void sendSquare(int pin, int freq,int duty){
   //we want to send the square wave for a certain amount of time, so first find out what the timestamp is at the start of the loop
   int t_start = millis();
