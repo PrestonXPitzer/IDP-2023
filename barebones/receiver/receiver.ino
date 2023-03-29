@@ -13,7 +13,29 @@ char pseudoDigiRead(int pin) {
     return 0;
   }
 }
-
+/**
+ * determine if the incoming byte has a parity error
+ * the parity bit is in the lsb position, and the parity is even
+ * adidtionally, the function should return the byte modified to no
+ * longer contain the parity bit
+ */
+byte checkParity(byte in){
+  int oneBits = 0;
+  int parity = (in & (1 << 0));
+  byte withoutParity = in/2;
+  for (int i = 0;i<8;i++){
+    if ((withoutParity & (1<<i)) == 1){
+      oneBits++;
+    }
+  }
+  if ((oneBits + parity) % 2 == 0){
+    Serial.print(withoutParity);
+  }
+  else {
+    Serial.print(withoutParity);
+    Serial.print("[Error]");
+  }
+}
 void setup() {
   pinMode(PIN_NUM, INPUT);
   Serial.begin(9600);
@@ -21,34 +43,13 @@ void setup() {
 void loop() {
   previous = current;
   current = pseudoDigiRead(PIN_NUM);
-  int bits[8];
   if (current == 0 && previous == 1) {
     delay(15);
     for (int i = 7; i >= 0; i--) {
       char in = pseudoDigiRead(PIN_NUM);
-      bits[i] = in;
       test |= (in << i);
       delay(11);
     }
-    //grab the parity bit seperately for easier calculation
-    int parityBit = pseudoDigiRead(PIN_NUM);
-    delay(11);
-    //determine the number of 1 bits that we got
-    int posBits = 0;
-    for (int j = 0;j<8;j++){
-      if (bits[j] == 1){
-        posBits++;
-      }
-    }
-    //if with the parity bit we have an even number than we're chillin
-    //otherwise notify the user that we are not chillin
-    if ((posBits + parityBit) % 2 != 0){ 
-      Serial.print("[likely error]");
-    }
-    
-    
-    Serial.print(test);
-    test = 0;
+    checkParity(test);
   }
-
 }

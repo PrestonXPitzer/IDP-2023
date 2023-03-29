@@ -7,28 +7,28 @@ void setup() {
 int baud = 22;
 void character_wise_transmission(char character, int pin){
   //Convert the integer char value into it's ascii equivalent, using the same process that we use to convert dec to bin by hand
-  int bits[9];
-  for (int i = 8; i >= 1; i--) {
+  bool bits[8];
+  for (int i = 7; i >= 1; i--) {
     bits[i] = (character & (1 << i)) != 0;
   }
   //handles the parity bit 
   int posBits = 0;
-  for (int k = 8; k >= 1; k--){
+  for (int k = 7; k >= 1; k--){
     if (bits[k] == 1){
       posBits++;
     }
   }
-  if (posBits % 2 != 0){ //aka if the number of positive bits is Even
-    bits[0] = 0; //then the parity bit is 0 because it's already even
+  if (posBits % 2 != 0){ //aka if the number of positive bits is not Even
+    bits[0] = 1; //then the parity bit is 1 to make it even
   }
   else{
-    bits[0] = 1; //otherwise the parity bit should be 1 to make the number of doodads even. 
+    bits[0] = 0;  
   }
   //Send the first low bit, at 45.45 baud, the duty cycle per bit is going to be .022 or 22ms always. 
   //For all transmissions 2125Hz = 0, 2295Hz = 1
   digitalWrite(pin, 0);
   delay(11);
-  for (int j = 8; j >= 0; j--) {
+  for (int j = 7; j >= 0; j--) {
     digitalWrite(pin, bits[j]);
     Serial.print(bits[j]);
     delay(11);
