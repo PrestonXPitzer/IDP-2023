@@ -20,10 +20,11 @@ void character_wise_transmission(char character, int pin){
   frame[5] = bits[2];
   frame[4] = bits[1];
   frame[2] = bits[0];
-  frame[0] = (frame[2]^frame[4]^frame[6]^frame[8]^frame[10]);
-  frame[1] = (frame[1]^frame[2]^frame[5]^frame[6]^frame[9]^frame[10]);
-  frame[3] = (frame[3]^frame[4]^frame[5]^frame[6]);
-  frame[7] = (frame[7]^frame[8]^frame[9]^frame[10]);
+  //set up the parity bits
+  frame[0] = (frame[2]^frame[4]^frame[6]^frame[8]^frame[10]); //1 in LSB
+  frame[1] = (frame[1]^frame[2]^frame[5]^frame[6]^frame[9]^frame[10]); //1 in LSB+!
+  frame[3] = (frame[3]^frame[4]^frame[5]^frame[6]); //1 in MSB-1
+  frame[7] = (frame[7]^frame[8]^frame[9]^frame[10]); //1 in MSB
   //Send the first low bit, at 45.45 baud, the duty cycle per bit is going to be .022 or 22ms always. 
   //For all transmissions 2125Hz = 0, 2295Hz = 1
   digitalWrite(pin, 0);
